@@ -10,7 +10,7 @@
       <img :src="img.url" alt="image">
     </div>
     <div class="ocr">
-      <div class="ocrContent">
+      <div class="ocrContent" @mouseup="slect">
         <div v-for="(item, index) in ocr.arr" :key="index" :style="returnStyle(item.location)">
           <span v-for="str in item.words">{{str}}</span>
         </div>
@@ -97,6 +97,20 @@ export default defineComponent({
         'position': 'absolute'
       }
     }
+    const slect = () => {
+      const selection = window.getSelection();
+      const range = selection.getRangeAt(0);
+      const allWithinRangeParent = range.commonAncestorContainer.getElementsByTagName("*");
+
+      const allSelected = [];
+      for (let i=0, el; el = allWithinRangeParent[i]; i++) {
+        if (selection.containsNode(el, true) ) {
+          allSelected.push(el);
+        }
+      }
+      console.log('left:', allSelected?.[0].offsetLeft)
+      console.log('top:', allSelected?.[0].offsetTop)
+    }
     return {
       uploadedFiles,
       demoUpload,
@@ -106,6 +120,7 @@ export default defineComponent({
       img,
       ocr,
       returnStyle,
+      slect
     };
   },
 });
@@ -125,5 +140,8 @@ export default defineComponent({
 }
 .ocrContent{
   position: relative;
+}
+.ocrContent div {
+  display: flex;
 }
 </style>
