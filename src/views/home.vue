@@ -26,7 +26,9 @@ import { defineComponent, onMounted, ref, reactive } from 'vue';
 
 export default defineComponent({
   setup() {
-    const access_token = '24.fcab650ae1dea3db9f3e7657d82c0329.2592000.1711962363.282335-39660899'
+    // token
+    const access_token = ''
+
     const uploadedFiles = ref([]);
     const demoUpload = ref(null);
     const img = reactive({
@@ -46,13 +48,14 @@ export default defineComponent({
     }
     const data = qs.stringify({
       'grant_type': 'client_credentials',
-      'client_id': 'jGlPYouOeYWwnM5HaXYWkFKN',
-      'client_secret': 'goPNhNcgRM0ll81R6DgNxCWXwmmtBwBx'
+      'client_id': '', // AK
+      'client_secret': '' // SK
     });
     const token =  async () => {
       const res =  await axios.post(`/api/oauth/2.0/token`, data)
       console.log(res)
     }
+    // 百度要求 img 要转 base64
     const getBase64 = (file) => {
       return new Promise( (resolve, reject) => {
         let reader = new FileReader();
@@ -77,7 +80,7 @@ export default defineComponent({
       toBaidu(base64)
     }
     const toBaidu = async (img) => {
-      const res = await axios.post('/api/rest/2.0/ocr/v1/general?access_token=24.ff5498e07cf21ad8e011c1ff1c27ff08.2592000.1711967303.282335-39660899',{image:img},
+      const res = await axios.post(`/api/rest/2.0/ocr/v1/general?access_token=${access_token}`,{image:img},
       {
         headers: {'Content-Type': 'application/x-www-form-urlencoded'}
 
